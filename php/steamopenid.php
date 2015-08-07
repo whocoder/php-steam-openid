@@ -71,7 +71,7 @@
 						$temp_auth = str_replace('http://steamcommunity.com/openid/id/', '', $this->OpenID->identity);
 
 						try{
-							$query = $this->Database_Handle->prepare("DELETE * FROM sessions WHERE auth = :sessionauth;");
+							$query = $this->Database_Handle->prepare("DELETE FROM sessions WHERE auth = :sessionauth;");
 							$query->bindParam(':sessionauth', $temp_auth, PDO::PARAM_INT);
 							$query->execute();
 						} catch (PDOException $exception){
