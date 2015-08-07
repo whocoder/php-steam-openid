@@ -5,6 +5,7 @@
 	class SteamOpenID extends simplecacher {
 		private $Config = array(
 			'cacher-expire' => 3600,
+			'cookie-expire' => 3600,
 			'openid-domain' => '',
 			'api-key' 		=> '',
 			'session-salt' => '',
@@ -16,6 +17,7 @@
 			'pass'		=> '',
 			'db' 		=> '',
 		);
+		
 		private $Database_Handle;
 		private $Database_Connected = true;
 
@@ -24,8 +26,6 @@
 		private $Auth;
 
 		function __construct($login = false){
-			session_start();
-
 			$this->OpenID = new LightOpenID($this->Config['openid-domain']);
 			$this->setexpire($this->Config['cacher-expire']);
 
@@ -42,8 +42,8 @@
 			if($this->Database_Connected == false)
 				die('Error');
 
-			if(isset($_SESSION[$this->Config['token-prefix'] . 'steam-token'])){
-				$old_token = $_SESSION[$this->Config['token-prefix'] . 'steam-token'];
+			if(isset($_COOKIE[$this->Config['token-prefix'] . 'steam-token'])){
+				$old_token = $_COOKIE[$this->Config['token-prefix'] . 'steam-token'];
 				try{
 					$query = $this->Database_Handle->prepare("SELECT auth FROM sessions WHERE token = :oldtoken;");
 					$query->bindParam(':oldtoken', $old_token, PDO::PARAM_STR);
@@ -90,13 +90,11 @@
 							die('Error 004');
 						}
 
-						$_SESSION[$this->Config['token-prefix'] . 'steam-token'] = $new_token;
+						setcookie($this->Config['token-prefix'] . 'steam-token', $new_token, time() + $this->Config['cookie-expire']);
 
 						$this->LoggedIn = true;
 						$this->Auth = $temp_auth;
 					}
-				}else{
-					$this->LoggedIn = false;
 				}
 			}
 		}
@@ -138,7 +136,7 @@
 		}
 
 		public function logout(){
-			unset($_SESSION[$this->Config['token-prefix'] . 'steam-token']);
+			unset($_COOKIE[$this->Config['token-prefix'] . 'steam-token']);
 			$this->LoggedIn = false;
 			$this->Auth = null;
 		}

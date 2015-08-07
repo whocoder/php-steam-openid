@@ -1,4 +1,4 @@
-# php-steam-openid
+# PHP-Steam-OpenID
 Simple Steam connection class using LightOpenID.
 
 ## Features
@@ -20,4 +20,8 @@ These are already included in the php folder, however feel free to grab a more r
 2. Import `sql/init.sql` into your chosen SQL database.
 3. Include `php/steamopenid.php` into your own PHP script.
 
-See the `php/example.php` file for more info.
+See the `example.php` file for more info.
+
+
+
+[Powered by Steam](http://steampowered.com/)
