@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<body style="background-color:black;text-align:center;margin:0 auto;">
 
